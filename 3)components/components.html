@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Hello React</title>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="example"> </div>
+  <script type="text/babel">
+      class Block extends React.Component {
+        render() {
+         return <h3>Hello</h3>;
+        }
+      }
+       ReactDOM.render ( <Block />, document.getElementById("example"));
+  </script>﻿
+
+</body>
+</html>

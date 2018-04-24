@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Hello React</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="program"></div>
+      
+
+    <script type="text/babel">
+
+        class Task extends React.Component {
+          constructor(props) {
+            super(props);
+            this.state = {
+              edit: false,
+            };
+          };
+          edit = () => {
+            this.setState ({edit: true});
+          };
+          remove = () => {
+            this.props.deleteBlock (this.props.index);
+          };
+          save = () => {
+            var value = this.refs.newTxt.value; 
+            this.props.update (this.refs.newTxt.value, this.props.index);
+            this.setState ({edit: false});
+          };
+          rendNorm = () => {
+            return (
+              <div className="box">
+                <div className="text">{this.props.children}</div>
+                <button onClick={this.edit} className="btn light">Редактировать</button>
+                <button onClick={this.remove} className="btn red">Удалить</button>
+              </div>
+            );
+          };
+          rendEdit = () => {
+            return (
+              <div className="box">
+                <textarea ref="newTxt" defaultValue={this.props.children}></textarea>
+                <button onClick={this.save} className="btn success">Сохранить</button>
+              </div>
+            );
+          };
+          render() {
+            if (this.state.edit) {
+              return this.rendEdit ();
+            } else {
+              return this.rendNorm ();
+            }
+          }
+        }
+
+        class Field extends React.Component {
+          constructor(props) {
+            super(props);
+            this.state = {
+              tasks: [
+                'Необходимо купить молоко!',
+                'Надо почистить зубы',
+                'Просто отдохнуть'
+              ]
+            };
+          };
+          deleteBlock (i) { // функция удаления блоков
+            var arr = this.state.tasks; // т.е. все наши задания мы помещаем в массив arr (купить молоко, почистить зубы...)
+            arr.splice (i, 1); // функция splice - в качестве параметра нам нужно поставить индекс того элемента, 
+                              // с которого мы начнем все удалять
+                              // вторым элементом сколько удалять элементов
+            this.setState ({tasks: arr});
+          }  
+          updateText (text, i) { // функция обновления. Первый параметр обновленный текст
+            var arr = this.state.tasks;
+            arr[i] = text;
+            this.setState ({tasks: arr});
+          }
+          eachTask (item, i) {
+            return (
+              <Task key={i} index={i} update={this.updateText} deleteBlock={this.deleteBlock}>
+                {item}
+              </Task>);
+          }
+          render() {
+            return (
+              <div className="field">
+                {
+                  this.state.tasks.map (this.eachTask);
+                }
+              </div>
+            );
+          }
+        }
+
+        const app = document.getElementById("program");
+        ReactDOM.render(<Field /> ,app)
+    </script>
+</body>
+</html>
